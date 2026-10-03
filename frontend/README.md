@@ -77,9 +77,3 @@ src/
 - **"Can't reach the server"**: the backend is not running or `VITE_API_URL` is wrong. Restart `npm run dev` after editing `.env`.
 - **Blank page after deploy on a sub-path or Nginx**: configure the server to fall back to `index.html` for unknown paths so routes like `/s/:token` work on refresh.
 - **Reset link does nothing**: links work once and expire after 30 minutes; request a new one.
-
-## Preview mode (review without a backend)
-
-`npm run dev:preview` starts the app with sample data and a fake signed-in user, so every screen can be reviewed without the backend or Azure. A "Preview mode" badge is shown in the corner. Useful addresses: `/s/demo-active`, `/s/demo-expired`, `/s/anything` (share page states), `/reset-password?token=abc` (or `token=bad` for the error). Name an upload file with "fail" in it to see the upload error state. Data resets on reload.
-
-This is fake data for review only. Before the final hand-in, delete `src/preview/`, `.env.preview`, the `dev:preview` script and the preview block in `src/main.jsx`.
