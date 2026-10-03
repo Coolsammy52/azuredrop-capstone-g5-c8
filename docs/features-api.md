@@ -130,6 +130,28 @@ Response `200`: `{ "file": <metadata> }` · `404` not found / not yours.
 
 Search, category lists and category-update responses all include the same metadata object, so list views and detail views stay consistent.
 
+## Forgot / reset password
+
+Added on top of the auth endpoints (`/auth/register`, `/auth/login`, `/auth/me`). Neither needs a login token.
+
+### `POST /auth/forgot-password`
+
+Body: `{ "email": "test@example.com" }`
+
+Response `200`, always the same text whether or not the email is registered (so nobody can discover which emails exist):
+`{ "message": "If that email is registered, a password reset link has been sent" }`
+
+`400` if `email` is missing. If the email is registered, the user gets an email with the link `<FRONTEND_URL>/reset-password?token=<token>`. The token is valid for **30 minutes** and works **once**. Asking again cancels the older link. Without SMTP settings the link is printed in the server console (local testing only).
+
+### `POST /auth/reset-password`
+
+Body: `{ "token": "<token from the link>", "password": "newpassword1" }`
+
+- `200` `{ "message": "Password updated. You can now log in." }`
+- `400` token missing, invalid, expired or already used; or password shorter than 8 characters.
+
+Frontend: the page at `/reset-password` reads `token` from the URL, asks for the new password, and calls this endpoint. Then send the user to login.
+
 ## Health
 
 `GET /health` → `{ "status": "ok", "database": "up" }` (`503` if the DB is unreachable). Defined in `backend/dev-server.js`; **skip it if the shared app already has one.**

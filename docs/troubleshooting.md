@@ -16,3 +16,30 @@
 | Share download URL gives 403 from Azure | VM identity lacks roles, or link already expired | Grant **Storage Blob Data Reader** + **Storage Blob Delegator**; request a fresh URL |
 | Share endpoint returns the plain blob URL | No Azure env vars set | Set `AZURE_STORAGE_ACCOUNT_NAME` (VM) or the connection string (local) |
 | `/health` returns `503` | Database unreachable | Check `DATABASE_URL`/`PG*` values and that Postgres is running |
+
+## Merge and setup problems
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| `npm install` fails with a JSON error after a merge | The merge left two JSON objects in `package.json` and `package-lock.json` | Keep one valid `package.json`, delete `package-lock.json`, run `npm install` |
+| Clearing a category fails with a null error | `files.category` is `NOT NULL` | The API resets it to `other` instead of null |
+| Foreign key type error when running migrations | `file_id` was created as UUID but `files.id` is `SERIAL` | Use `INTEGER` for `file_id` |
+| Server won't start: "AZURE_STORAGE_CONNECTION_STRING is not configured" | Missing Azure values in `.env` | Fill in `AZURE_STORAGE_CONNECTION_STRING` and `AZURE_STORAGE_CONTAINER` |
+| `npm run migrate` fails: relation "users" does not exist | Tables not created yet | Run `src/config/schema.sql` first, then `npm run migrate` |
+
+## Forgot / reset password
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| No reset email arrives | `SMTP_HOST` is not set, so the link is only printed in the server console | Set `SMTP_*` and `MAIL_FROM` in `.env`, or copy the link from the console when testing |
+| Reset link goes to the wrong site | `FRONTEND_URL` is wrong or missing | Set it to the frontend address |
+| `400 Reset link is invalid or has expired` | Token older than 30 minutes, already used, or replaced by a newer request | Ask for a new link |
+| `relation "password_reset_tokens" does not exist` | Migration 002 hasn't been run | `npm run migrate` |
+
+## Running the test script
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| "Set TEST_DB_NAME and TEST_DB_PASSWORD first" | Variables not set | See [backend-setup.md](backend-setup.md), section 6 |
+| "Refusing to run: ... does not look like a test database" | The database name must contain `test`, because the script empties its tables | Create a separate database such as `azuredrop_test` |
+| `password authentication failed` | Wrong `TEST_DB_PASSWORD` | Use your Postgres password |

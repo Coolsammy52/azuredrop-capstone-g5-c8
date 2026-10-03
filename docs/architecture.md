@@ -49,7 +49,9 @@ A request flows: `route → auth middleware → controller → model → Postgre
 
 | Feature | Endpoints | Owner |
 |---|---|---|
-| Auth, upload/download, validation | *(add yours here)* | partner |
+| Auth | `POST /auth/register`, `POST /auth/login`, `GET /auth/me` | partner |
+| Password reset | `POST /auth/forgot-password`, `POST /auth/reset-password` | Dammy |
+| Upload / download / validation | `POST /files/upload`, `GET /files`, `GET /files/:id/download` (10 MB max; PDF, Word, TXT, JPEG, PNG) | partner |
 | Categories | `PATCH /files/:id/category`, `GET /files/categories`, `GET /files/category/:category` | Dammy |
 | Search | `GET /files/search?query=&category=` | Dammy |
 | Share links | `POST /files/:id/share`, `GET /share/:token` (public), `GET /files/:id/shares`, `DELETE /shares/:token` | Dammy |
