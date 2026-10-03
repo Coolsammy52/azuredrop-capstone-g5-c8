@@ -3,6 +3,3 @@ node_modules/
 .env.*
 !.env.example
 npm-debug.log*
-
-node_modules/
-.env

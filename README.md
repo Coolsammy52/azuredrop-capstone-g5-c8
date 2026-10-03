@@ -23,9 +23,11 @@ metadata tracked in PostgreSQL and access secured via Managed Identity.
 | Temporary file-sharing links (expire, public access without login) | Done |
 | File metadata | Done |
 | `/health` endpoint | Done |
+| React frontend (all screens, light and dark theme, responsive) | Done |
 | Docker, Nginx, HTTPS, GitHub Actions CI/CD | In progress (infra / CI-CD groups) |
 
 ## Tech stack
+- **Frontend:** React 18, Vite, React Router, Tailwind CSS
 - **Backend:** Node.js + Express 5
 - **Database:** PostgreSQL
 - **File storage:** Azure Blob Storage
@@ -42,6 +44,8 @@ See [docs/architecture.md](docs/architecture.md)
 | [docs/features-api.md](docs/features-api.md) | Request/response details for categories, search, share links, metadata, password reset |
 | [docs/backend-setup.md](docs/backend-setup.md) | Running the backend, environment variables, tests |
 | [docs/troubleshooting.md](docs/troubleshooting.md) | Common problems and fixes |
+| [frontend/README.md](frontend/README.md) | Running the frontend, routes, behaviour notes, common problems |
+| [docs/design-system/](docs/design-system/) | Design system reference for the UI |
 | [docs/optional/](docs/optional/) | Frontend guide and a plain-English "why we built it this way" |
 
 ## Setup (backend)
@@ -59,6 +63,20 @@ npm start                                   # then open http://localhost:3000/he
 
 All configuration comes from environment variables. See `backend/.env.example`
 for the full list (database, JWT secret, Azure storage, optional SMTP for reset emails).
+
+## Setup (frontend)
+
+Start the backend first (see above), then in a second terminal:
+
+```bash
+cd frontend
+npm install
+cp .env.example .env     # VITE_API_URL defaults to http://localhost:3000
+npm run dev              # http://localhost:5173
+```
+
+Password reset emails link to `<FRONTEND_URL>/reset-password`, so set `FRONTEND_URL`
+in `backend/.env` to the frontend address. Full details: [frontend/README.md](frontend/README.md).
 
 ## API overview
 
@@ -83,5 +101,6 @@ Details: [docs/features-api.md](docs/features-api.md).
 **test** database. See [docs/backend-setup.md](docs/backend-setup.md), section 6.
 
 ## Status
-🚧 In progress — backend features complete and tested; deployment (Docker, Nginx,
-HTTPS, CI/CD) and the frontend are being built by the other groups.
+🚧 In progress — backend and frontend are complete and integrated; the backend passes
+its automated tests. Still to do: real-storage upload/download checks and deployment
+(Docker, Nginx, HTTPS, CI/CD).

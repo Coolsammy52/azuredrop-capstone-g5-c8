@@ -1,0 +1,57 @@
+/* Design tokens. Dark mode follows the system unless data-theme is set by the toggle. */
+:root {
+  --bg: #f5f7f8;
+  --surface: #ffffff;
+  --ink: #12222b;
+  --muted: #5a6b75;
+  --line: #dce3e7;
+  --primary: #0b6e8a;
+  --primary-h: #085a72;
+  --on-primary: #ffffff;
+  --tint: #e3f2f6;
+  --ok: #1e7f4f;
+  --okbg: #e4f4eb;
+  --warn: #9a5b00;
+  --warnbg: #fcf0d9;
+  --err: #b3261e;
+  --errbg: #fbe7e5;
+  --r: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0e171c;
+    --surface: #152229;
+    --ink: #e8eef1;
+    --muted: #93a5af;
+    --line: #27363e;
+    --primary: #4fb4d0;
+    --primary-h: #79c8df;
+    --on-primary: #0e171c;
+    --tint: #12303a;
+    --ok: #5bc98c;
+    --okbg: #12301f;
+    --warn: #f0b34f;
+    --warnbg: #35280f;
+    --err: #f28b82;
+    --errbg: #3a1a18;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #0e171c;
+  --surface: #152229;
+  --ink: #e8eef1;
+  --muted: #93a5af;
+  --line: #27363e;
+  --primary: #4fb4d0;
+  --primary-h: #79c8df;
+  --on-primary: #0e171c;
+  --tint: #12303a;
+  --ok: #5bc98c;
+  --okbg: #12301f;
+  --warn: #f0b34f;
+  --warnbg: #35280f;
+  --err: #f28b82;
+  --errbg: #3a1a18;
+}
