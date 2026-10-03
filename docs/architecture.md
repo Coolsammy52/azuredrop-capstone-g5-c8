@@ -24,14 +24,15 @@ Browser (frontend)
 The backend is split in layers; each folder has one job:
 
 ```
-backend/
+backend/src/
+  server.js      starts the app, mounts the routes
   routes/        which URL calls which function
   controllers/   validate input, decide the response
-  models/        all SQL (talks to PostgreSQL)
-  middleware/    auth (JWT → req.user)
-  config/        database pool, Azure Blob client (read from env vars)
+  models/        SQL for categories, search, share links
+  middleware/    authMiddleware (JWT → req.user.id)
+  config/        database pool, Azure Blob clients, schema.sql
   utils/         shared helpers, error handler
-  migrations/    SQL that creates/changes tables
+backend/migrations/   extra indexes (npm run migrate)
 ```
 
 A request flows: `route → auth middleware → controller → model → PostgreSQL → JSON response`.

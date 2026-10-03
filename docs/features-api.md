@@ -26,7 +26,7 @@ Every endpoint that returns a file uses this shape (built by `toMetadata()` in `
 }
 ```
 
-`file_size` is in bytes (number). `category` is `null` when unset. Uploader email/password are never returned.
+`file_size` is in bytes (number). `category` is `"other"` for files that were never categorised. Uploader email/password are never returned.
 
 > **For the upload/download teammate:** please use `toMetadata()` (or the same shape) in the list/detail endpoints so metadata is consistent everywhere.
 
@@ -36,15 +36,15 @@ Every endpoint that returns a file uses this shape (built by `toMetadata()` in `
 
 ### 🔒 `PATCH /files/:id/category`
 
-Set, change, or clear a file's category.
+Set or change a file's category.
 
-Body: `{ "category": "invoices" }` — trimmed, max 50 chars. `null` or `""` clears it.
+Body: `{ "category": "invoices" }` — trimmed, max 50 chars. `null` or `""` resets it to `"other"`.
 
 Response `200`: `{ "file": <metadata> }` · `404` file not found / not yours · `400` invalid category.
 
 ### 🔒 `GET /files/categories`
 
-The caller's categories with counts (uncategorised files are skipped).
+The caller's categories with counts (includes `"other"`).
 
 ```json
 { "categories": [ { "category": "invoices", "file_count": 4 }, { "category": "photos", "file_count": 12 } ] }

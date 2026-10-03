@@ -18,6 +18,11 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/auth", authRoutes);
+
+// Categories, search, share links, metadata. Mounted BEFORE /files so that
+// /files/search and /files/categories are not treated as /files/:id.
+app.use("/", require("./routes/featureRoutes"));
+
 app.use("/files", fileRoutes);
 
 app.use((err, req, res, next) => {
@@ -41,6 +46,9 @@ app.use((err, req, res, next) => {
 
     next(err);
 });
+
+// Final handler for errors from the share/search/category/metadata routes.
+app.use(require("./utils/http").errorHandler);
 
 const PORT = process.env.PORT || 3000;
 

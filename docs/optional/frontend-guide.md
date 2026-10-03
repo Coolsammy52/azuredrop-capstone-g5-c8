@@ -19,7 +19,7 @@ type FileMetadata = {
   filename: string;
   file_type: string;        // e.g. "application/pdf"
   file_size: number;        // bytes
-  category: string | null;  // null = no category
+  category: string;         // "other" if never set
   file_url: string;         // internal link, do NOT use it to download
   uploaded_at: string;
   uploader: { id: string; name: string };
@@ -64,10 +64,10 @@ const { categories } = await api("/files/categories", { token });   // [{ catego
 const { files } = await api(`/files/category/${encodeURIComponent(name)}`, { token });
 ```
 
-**Set or clear a category** (free text, max 50 characters):
+**Set or reset a category** (free text, max 50 characters):
 ```js
 await api(`/files/${id}/category`, { method: "PATCH", body: { category: "invoices" }, token });
-await api(`/files/${id}/category`, { method: "PATCH", body: { category: null }, token }); // clear
+await api(`/files/${id}/category`, { method: "PATCH", body: { category: null }, token }); // reset to "other"
 ```
 "Invoices" and "invoices" match in filters, but show as two names in the category list. You may want to make them lowercase in the UI.
 

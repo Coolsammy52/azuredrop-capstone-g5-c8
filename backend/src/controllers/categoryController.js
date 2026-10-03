@@ -5,7 +5,10 @@ const { parsePaging, pagedResponse } = require('./searchController');
 
 const MAX_CATEGORY_LENGTH = 50;
 
-/** PATCH /files/:id/category   body: { "category": "invoices" }  (null or "" clears it) */
+// files.category is NOT NULL and uploads default to "other", so "clearing" resets to this.
+const DEFAULT_CATEGORY = 'other';
+
+/** PATCH /files/:id/category   body: { "category": "invoices" }  (null or "" resets it to "other") */
 exports.setCategory = asyncHandler(async (req, res) => {
   const { category } = req.body || {};
   if (category !== null && category !== undefined && typeof category !== 'string') {
@@ -18,7 +21,7 @@ exports.setCategory = asyncHandler(async (req, res) => {
   }
   if (category === undefined) throw new HttpError(400, 'category is required');
 
-  const updated = await fileModel.updateCategory(req.params.id, req.user.id, value || null);
+  const updated = await fileModel.updateCategory(req.params.id, req.user.id, value || DEFAULT_CATEGORY);
   if (!updated) throw new HttpError(404, 'File not found');
 
   const file = await fileModel.findOwnedById(req.params.id, req.user.id);

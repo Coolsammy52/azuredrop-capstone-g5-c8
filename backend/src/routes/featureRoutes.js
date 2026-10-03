@@ -1,13 +1,13 @@
 /**
  * Routes for: categories, search, share links, metadata.
  *
- * Mount at the app root, BEFORE any router that defines `/files/:id`, so the
- * static paths below (/files/search, /files/categories ...) are not swallowed:
+ * Mounted at the app root in src/server.js, BEFORE the /files router, so the
+ * static paths below (/files/search, /files/categories ...) are matched first:
  *
- *   app.use('/', require('./routes/features'));
+ *   app.use("/", require("./routes/featureRoutes"));
  */
 const express = require('express');
-const auth = require('../middleware/auth');
+const auth = require('../middleware/authMiddleware');
 const category = require('../controllers/categoryController');
 const search = require('../controllers/searchController');
 const share = require('../controllers/shareController');

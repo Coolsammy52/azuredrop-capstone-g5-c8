@@ -1,15 +1,15 @@
 -- Migration 001: shared_links table + supporting indexes.
--- Assumes `users` and `files` already exist (created by the auth/upload feature);
--- they are NOT created or altered here. Safe to re-run.
+-- Safe to re-run. `users` and `files` are created by src/config/schema.sql
+-- (auth/upload feature) and are NOT created or altered here.
+-- The shared_links definition below matches the one in schema.sql
+-- (SERIAL id, INTEGER file_id), so whichever runs first, the result is the same.
 
--- NOTE: the FK column types below must match files.id. UUID is assumed;
--- if files.id is SERIAL/INTEGER, change file_id to INTEGER (see docs/assumptions.md).
 CREATE TABLE IF NOT EXISTS shared_links (
-  id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  file_id      UUID NOT NULL REFERENCES files(id) ON DELETE CASCADE,
-  share_token  VARCHAR(64) NOT NULL UNIQUE,
-  expires_at   TIMESTAMPTZ NOT NULL,
-  created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  id           SERIAL PRIMARY KEY,
+  file_id      INTEGER NOT NULL REFERENCES files(id) ON DELETE CASCADE,
+  share_token  VARCHAR(255) UNIQUE NOT NULL,
+  expires_at   TIMESTAMP NOT NULL,
+  created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX IF NOT EXISTS idx_shared_links_file_id ON shared_links (file_id);
