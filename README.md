@@ -8,7 +8,7 @@ which are stored in Azure Blob Storage (not on the app server), with
 metadata tracked in PostgreSQL and access secured via Managed Identity.
 
 ## Team
-( Oluwaseun Samuel, Damilare, stanley, the rest will be added later in the day )
+CAPSTONE Group 5 - techcrushcohort8
 
 ## Features
 
