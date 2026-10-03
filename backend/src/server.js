@@ -4,6 +4,7 @@ require("dotenv").config();
 
 const authRoutes = require("./routes/authRoutes");
 
+const fileRoutes = require("./routes/fileRoutes");
 const app = express();
 
 app.use(cors());
@@ -17,6 +18,29 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/auth", authRoutes);
+app.use("/files", fileRoutes);
+
+app.use((err, req, res, next) => {
+    if (err instanceof require("multer").MulterError) {
+        if (err.code === "LIMIT_FILE_SIZE") {
+            return res.status(400).json({
+                error: "File size must not exceed 10 MB"
+            });
+        }
+
+        return res.status(400).json({
+            error: "File upload error"
+        });
+    }
+
+    if (err && err.message === "File type is not allowed") {
+        return res.status(400).json({
+            error: "File type is not allowed"
+        });
+    }
+
+    next(err);
+});
 
 const PORT = process.env.PORT || 3000;
 
