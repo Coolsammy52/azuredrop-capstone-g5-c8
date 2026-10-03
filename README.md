@@ -45,7 +45,7 @@ See [docs/architecture.md](docs/architecture.md)
 | [docs/backend-setup.md](docs/backend-setup.md) | Running the backend, environment variables, tests |
 | [docs/troubleshooting.md](docs/troubleshooting.md) | Common problems and fixes |
 | [frontend/README.md](frontend/README.md) | Running the frontend, routes, behaviour notes, common problems |
-| [docs/design-system/](docs/design-system/) | Design system reference for the UI |
+| [frontend/design-system/](frontend/design-system/) | Design system reference for the UI (style guide and component sheet) |
 | [docs/optional/](docs/optional/) | Frontend guide and a plain-English "why we built it this way" |
 
 ## Setup (backend)
