@@ -49,13 +49,13 @@ A request flows: `route → auth middleware → controller → model → Postgre
 
 | Feature | Endpoints | Owner |
 |---|---|---|
-| Auth | `POST /auth/register`, `POST /auth/login`, `GET /auth/me` | partner |
-| Password reset | `POST /auth/forgot-password`, `POST /auth/reset-password` | Dammy |
-| Upload / download / validation | `POST /files/upload`, `GET /files`, `GET /files/:id/download` (10 MB max; PDF, Word, TXT, JPEG, PNG) | partner |
-| Categories | `PATCH /files/:id/category`, `GET /files/categories`, `GET /files/category/:category` | Dammy |
-| Search | `GET /files/search?query=&category=` | Dammy |
-| Share links | `POST /files/:id/share`, `GET /share/:token` (public), `GET /files/:id/shares`, `DELETE /shares/:token` | Dammy |
-| Metadata | `GET /files/:id/metadata` | Dammy |
+| Auth | `POST /auth/register`, `POST /auth/login`, `GET /auth/me` | Backend 1 (auth and files) |
+| Password reset | `POST /auth/forgot-password`, `POST /auth/reset-password` | Backend 2 (features) |
+| Upload / download / validation | `POST /files/upload`, `GET /files`, `GET /files/:id/download` (10 MB max; PDF, Word, TXT, JPEG, PNG) | Backend 1 (auth and files) |
+| Categories | `PATCH /files/:id/category`, `GET /files/categories`, `GET /files/category/:category` | Backend 2 (features) |
+| Search | `GET /files/search?query=&category=` | Backend 2 (features) |
+| Share links | `POST /files/:id/share`, `GET /share/:token` (public), `GET /files/:id/shares`, `DELETE /shares/:token` | Backend 2 (features) |
+| Metadata | `GET /files/:id/metadata` | Backend 2 (features) |
 | Health | `GET /health` | shared |
 
 Full request/response details: [features-api.md](features-api.md).
