@@ -1,25 +1,37 @@
 {
-  "name": "azuredrop-frontend",
-  "private": true,
+  "name": "azuredrop-capstone-g5-c8",
   "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "dev:preview": "vite --mode preview",
-    "build": "vite build",
-    "lint" : "eslint",
-    "preview": "vite preview"
+  "description": "Group 5 cohort 8 Capstone project for Techcrush Cloud computing Bootcamp.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
   },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Coolsammy52/azuredrop-capstone-g5-c8.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Coolsammy52/azuredrop-capstone-g5-c8/issues"
+  },
+  "homepage": "https://github.com/Coolsammy52/azuredrop-capstone-g5-c8#readme",
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.2"
+    "@azure/storage-blob": "^12.34.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.4.0",
+    "pg": "^8.23.1"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.13",
-    "vite": "^5.4.8"
+    "nodemon": "^3.1.14"
   }
 }
