@@ -15,14 +15,14 @@ How to call my backend endpoints from the frontend. Exact request/response detai
 
 ```ts
 type FileMetadata = {
-  id: string;
+  id: number;
   filename: string;
   file_type: string;        // e.g. "application/pdf"
   file_size: number;        // bytes
   category: string;         // "other" if never set
   file_url: string;         // internal link, do NOT use it to download
   uploaded_at: string;
-  uploader: { id: string; name: string };
+  uploader: { id: number; name: string };
 };
 
 type PagedFiles = {

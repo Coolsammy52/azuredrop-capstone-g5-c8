@@ -30,15 +30,15 @@ migrations/ + scripts/ extra indexes for search; run with npm run migrate
 
 ## 3. Environment variables
 
-See `backend/.env.example`. In short: `DB_*` for PostgreSQL, `JWT_SECRET`, `AZURE_STORAGE_CONNECTION_STRING` and `AZURE_STORAGE_CONTAINER` for file storage. Optional: `AZURE_STORAGE_ACCOUNT_NAME` (Managed Identity for share links on the VM) and `SHARE_*` time limits.
+See `backend/.env.example`. In short: `DB_*` for PostgreSQL (add `DB_SSL=true` for Azure Database for PostgreSQL), `JWT_SECRET`, `AZURE_STORAGE_CONTAINER`, and one way to reach storage: `AZURE_STORAGE_ACCOUNT_NAME` (Managed Identity, for the VM) or `AZURE_STORAGE_CONNECTION_STRING` (local development). If the account name is set it wins. Optional: `SHARE_*` time limits and `SMTP_*` for reset emails.
 
-### Azure setup for Managed Identity (optional, for share links on the VM)
+### Azure setup for Managed Identity (recommended on the VM)
 
 1. Turn on a system-assigned managed identity for the VM.
-2. In the storage account, give that identity **Storage Blob Data Reader** and **Storage Blob Delegator**.
+2. In the storage account, give that identity **Storage Blob Data Contributor** (upload and download) and **Storage Blob Delegator** (share links).
 3. Set `AZURE_STORAGE_ACCOUNT_NAME` on the VM.
 
-If it is not set, share links are signed with the connection string instead.
+Upload, download and share links all use the identity. Leave the connection string unset on the VM.
 
 ## 4. How the two parts fit together
 
