@@ -1,14 +1,14 @@
 /**
- * File details: metadata, inline category editing, blob download, and the share-links panel
- * (create with expiry presets, copy, list, revoke with confirmation).
+ * File details: metadata, inline category editing, blob download, delete with confirmation, and the
+ * share-links panel (create with expiry presets, copy, list, revoke with confirmation).
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Icon from '../components/Icon.jsx';
 import Dialog from '../components/Dialog.jsx';
 import CopyField, { useCopy } from '../components/CopyField.jsx';
 import { Badge, Banner, Button, EmptyState, FileChip, Skeleton } from '../components/ui.jsx';
-import { downloadFile, getMetadata, updateCategory } from '../api/files.js';
+import { deleteFile, downloadFile, getMetadata, updateCategory } from '../api/files.js';
 import { createShare, listShares, revokeShare } from '../api/shares.js';
 import { useCategories } from '../context/CategoriesContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
@@ -146,6 +146,7 @@ function SharePanel({ fileId }) {
 export default function FileDetailsPage() {
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const toast = useToast();
   const { refresh } = useCategories();
   const [state, setState] = useState({ status: 'loading', file: null, error: '' });
@@ -155,6 +156,9 @@ export default function FileDetailsPage() {
   const [catError, setCatError] = useState('');
   const [downloading, setDownloading] = useState(false);
   const [dlError, setDlError] = useState('');
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
   const scrolled = useRef(false);
 
   const load = useCallback((signal) => {
@@ -212,6 +216,28 @@ export default function FileDetailsPage() {
     }
   }
 
+  // Permanent delete: only runs after the user confirms in the dialog.
+  async function onDelete() {
+    if (deleting) return;
+    setDeleting(true); setDeleteError('');
+    try {
+      await deleteFile(id);
+      toast.success('File deleted.');
+      refresh(); // sidebar category counts
+      navigate('/', { replace: true });
+    } catch (e) {
+      if (e.status === 404) { // already gone, for example deleted in another tab
+        refresh();
+        navigate('/', { replace: true });
+      } else if (e.status !== 401) {
+        setDeleteError(e.message); // 401 is handled globally (back to login)
+        setConfirmDelete(false);
+      }
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   if (state.status === 'loading') {
     return <div className="flex flex-col gap-4" role="status"><span className="sr-only-live">Loading file</span><Skeleton className="h-4 w-48" /><Skeleton className="h-9 w-2/3" /><Skeleton className="h-40" /></div>;
   }
@@ -239,9 +265,13 @@ export default function FileDetailsPage() {
 
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <h1 className="min-w-0 break-words !text-[26px] sm:!text-[32px]" style={{ overflowWrap: 'anywhere' }} title={f.filename}>{f.filename}</h1>
-        <Button variant="primary" loading={downloading} onClick={onDownload}>{!downloading && <Icon name="download" size={16} />} Download</Button>
+        <div className="flex items-center gap-2 flex-wrap">
+          <Button variant="primary" loading={downloading} onClick={onDownload}>{!downloading && <Icon name="download" size={16} />} Download</Button>
+          <Button variant="danger" onClick={() => { setDeleteError(''); setConfirmDelete(true); }}>Delete file</Button>
+        </div>
       </div>
       {dlError && <Banner type="err">{dlError}</Banner>}
+      {deleteError && <Banner type="err">{deleteError}</Banner>}
 
       <section className="card" aria-label="File information">
         <dl className="m-0 grid gap-x-6 gap-y-3" style={{ gridTemplateColumns: 'minmax(90px, auto) minmax(0, 1fr)' }}>
@@ -269,6 +299,13 @@ export default function FileDetailsPage() {
       </section>
 
       <SharePanel fileId={f.id} />
+
+      <Dialog
+        open={confirmDelete} title="Delete this file?" onClose={() => { if (!deleting) setConfirmDelete(false); }}
+        footer={<><Button variant="secondary" onClick={() => setConfirmDelete(false)} disabled={deleting}>Keep file</Button><Button variant="danger" loading={deleting} onClick={onDelete}>Delete file</Button></>}
+      >
+        <span className="break-words" style={{ overflowWrap: 'anywhere' }}>{f.filename}</span> will be deleted permanently, and all of its share links will stop working. This cannot be undone.
+      </Dialog>
     </div>
   );
 }

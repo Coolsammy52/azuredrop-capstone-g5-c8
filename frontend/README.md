@@ -48,7 +48,7 @@ Without email settings the backend prints password reset links in its console.
 | `/s/:token` | Public shared-file page | no |
 | `/` | My files (search, category filter, pager) | yes |
 | `/upload` | Upload files | yes |
-| `/files/:id` | File details, category, share links | yes |
+| `/files/:id` | File details, category, delete, share links | yes |
 | `/account` | Account | yes |
 
 ## Folder structure
@@ -71,6 +71,7 @@ src/
 - Downloads use `fetch` with the Authorization header and save the blob, because a plain link cannot send the token.
 - Uploads go one after another, with progress through `XMLHttpRequest`. Files are checked in the browser first (10 MB, PDF/DOC/DOCX/TXT/JPG/PNG).
 - Share links are shown as `<this site>/s/<token>`.
+- "Delete file" on the file details page asks for confirmation, then removes the file, its share links and its record for good (`DELETE /files/:id`).
 
 ## Common problems
 

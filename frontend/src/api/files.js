@@ -21,6 +21,10 @@ export const getMetadata = (id, signal) => request(`/files/${encodeURIComponent(
 export const updateCategory = (id, category) =>
   request(`/files/${encodeURIComponent(id)}/category`, { method: 'PATCH', body: { category } });
 
+/** Permanently delete a file (storage blob, record and its share links). Resolves with null on 204. */
+export const deleteFile = (id) =>
+  request(`/files/${encodeURIComponent(id)}`, { method: 'DELETE' });
+
 /**
  * Download needs the Authorization header, so fetch as a blob and trigger a save
  * through a temporary object URL (a plain link would not send the token).

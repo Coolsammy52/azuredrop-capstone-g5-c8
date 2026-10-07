@@ -22,7 +22,7 @@ CAPSTONE Group 5 - techcrushcohort8
 | File search (by filename and/or category) | Done |
 | Temporary file-sharing links (expire, public access without login) | Done |
 | File metadata | Done |
-| Delete file | Done in the API (frontend button still to add) |
+| Delete file (with confirmation) | Done |
 | `/health` endpoint | Done |
 | React frontend (all screens, light and dark theme, responsive) | Done |
 | Docker, Nginx, HTTPS, GitHub Actions CI/CD | In progress (infra / CI-CD groups) |
