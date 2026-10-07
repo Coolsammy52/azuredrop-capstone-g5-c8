@@ -64,11 +64,11 @@ Things to know:
 - Expired links are not deleted automatically. They just stop working.
 - No rate limit on `/share/:token`. We can add one in Nginx later.
 - Extras beyond the brief: list categories, list share links, revoke a link, and paging.
-- Tested: 50 automated checks pass against a real PostgreSQL database (see section 6). Not yet tested: real file upload/download against Azure Blob Storage.
+- Tested: 54 automated checks pass against a real PostgreSQL database (see section 6). Not yet tested: real file upload/download against Azure Blob Storage.
 
 ## 6. Run the automated test
 
-`npm run test:e2e` starts the server and checks every endpoint (50 checks: auth, forgot/reset password, categories, search, metadata, share links, security). It needs a **separate test database**, because it empties the tables. It refuses to run unless the database name contains `test`.
+`npm run test:e2e` starts the server and checks every endpoint (54 checks: auth, forgot/reset password, categories, search, metadata, share links, security). It needs a **separate test database**, because it empties the tables. It refuses to run unless the database name contains `test`.
 
 ```bash
 # 1. create an empty database, e.g. azuredrop_test (pgAdmin: right-click Databases -> Create)
@@ -77,4 +77,4 @@ $env:TEST_DB_NAME="azuredrop_test"; $env:TEST_DB_PASSWORD="<your postgres passwo
 npm run test:e2e
 ```
 
-Optional: `TEST_DB_HOST` (localhost), `TEST_DB_PORT` (5432), `TEST_DB_USER` (postgres), `TEST_API_PORT` (3100). The script creates the tables itself. Real file upload and download are not covered (they need a real Azure storage account), so test those by hand with your real `.env`.
+Optional: `TEST_DB_HOST` (localhost), `TEST_DB_PORT` (5432), `TEST_DB_USER` (postgres), `TEST_API_PORT` (3100). The script creates the tables itself. Real file upload, download and delete are not covered (they need a real Azure storage account), so test those by hand with your real `.env`.

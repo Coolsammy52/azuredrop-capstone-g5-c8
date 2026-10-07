@@ -56,6 +56,7 @@ A request flows: `route → auth middleware → controller → model → Postgre
 | Search | `GET /files/search?query=&category=` | Backend 2 (features) |
 | Share links | `POST /files/:id/share`, `GET /share/:token` (public), `GET /files/:id/shares`, `DELETE /shares/:token` | Backend 2 (features) |
 | Metadata | `GET /files/:id/metadata` | Backend 2 (features) |
+| Delete file | `DELETE /files/:id` (removes the blob, the record and its share links) | Backend 2 (features) |
 | Health | `GET /health` | shared |
 
 Full request/response details: [features-api.md](features-api.md).

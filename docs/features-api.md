@@ -130,6 +130,19 @@ Response `200`: `{ "file": <metadata> }` · `404` not found / not yours.
 
 Search, category lists and category-update responses all include the same metadata object, so list views and detail views stay consistent.
 
+## 5. Delete a file
+
+### 🔒 `DELETE /files/:id`
+
+Permanently deletes one of the caller's files: first the file in Azure Blob Storage, then its database record. Every share link for that file is removed with it, so those links stop working at once (the public page shows "not found").
+
+- `204` deleted, no body.
+- `404` file not found, or not yours (the same answer, so IDs cannot be probed). Deleting twice also gives `404`.
+- `400` invalid id.
+- `500` `{ "error": "File delete failed" }` if storage could not be reached. The record is kept, so the user can try again.
+
+This cannot be undone. The frontend must ask for confirmation first (a dialog with a danger button), then refresh the file list and the category counts.
+
 ## Forgot / reset password
 
 Added on top of the auth endpoints (`/auth/register`, `/auth/login`, `/auth/me`). Neither needs a login token.

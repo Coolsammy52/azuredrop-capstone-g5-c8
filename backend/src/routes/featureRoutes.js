@@ -12,6 +12,7 @@ const category = require('../controllers/categoryController');
 const search = require('../controllers/searchController');
 const share = require('../controllers/shareController');
 const metadata = require('../controllers/metadataController');
+const removal = require('../controllers/deleteFileController');
 
 const router = express.Router();
 
@@ -26,6 +27,7 @@ router.get('/files/category/:category', auth, category.listFilesByCategory);
 
 router.get('/files/:id/metadata', auth, metadata.getMetadata);
 router.patch('/files/:id/category', auth, category.setCategory);
+router.delete('/files/:id', auth, removal.deleteFile);
 
 router.post('/files/:id/share', auth, share.createShareLink);
 router.get('/files/:id/shares', auth, share.listShareLinks);

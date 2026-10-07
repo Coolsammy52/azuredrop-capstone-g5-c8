@@ -15,7 +15,7 @@
  *   TEST_DB_USER      default postgres
  *   TEST_API_PORT     default 3100
  *
- * Not covered: real file upload/download (needs a real Azure storage account).
+ * Not covered: real file upload, download and delete (needs a real Azure storage account).
  * Files are inserted straight into the database with a fake blob URL instead.
  */
 const fs = require('fs');
@@ -183,7 +183,15 @@ async function run() {
     await call('revoke', 'DELETE', `/shares/${tok}`, { token: t, expect: 204 });
     await call('revoked link is gone', 'GET', `/share/${tok}`, { expect: 404 });
 
-    console.log('\n=== 8. SECURITY ===');
+    console.log('\n=== 8. DELETE FILE (error cases; a real delete needs real storage) ===');
+    await call('delete needs login', 'DELETE', '/files/1', { expect: 401 });
+    await call("can't delete someone else's file", 'DELETE', '/files/4', { token: t, expect: 404 });
+    await call('delete missing file', 'DELETE', '/files/9999', { token: t, expect: 404 });
+    await call('non-numeric id', 'DELETE', '/files/abc', { token: t, expect: 400 });
+    const still = await db.query('SELECT COUNT(*)::int AS n FROM files');
+    console.log(`      files still in database after the failed deletes: ${still.rows[0].n} (expected 4)`);
+
+    console.log('\n=== 9. SECURITY ===');
     await call('no token', 'GET', '/files/search', { expect: 401 });
     await call('bad token', 'GET', '/files/search', { token: 'garbage', expect: 401 });
     await call('share needs login', 'POST', '/files/1/share', { expect: 401 });

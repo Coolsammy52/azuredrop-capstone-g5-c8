@@ -22,6 +22,7 @@ CAPSTONE Group 5 - techcrushcohort8
 | File search (by filename and/or category) | Done |
 | Temporary file-sharing links (expire, public access without login) | Done |
 | File metadata | Done |
+| Delete file | Done in the API (frontend button still to add) |
 | `/health` endpoint | Done |
 | React frontend (all screens, light and dark theme, responsive) | Done |
 | Docker, Nginx, HTTPS, GitHub Actions CI/CD | In progress (infra / CI-CD groups) |
@@ -86,7 +87,7 @@ Everything except register, login, forgot/reset password, `/health` and
 | Area | Endpoints |
 |---|---|
 | Auth | `POST /auth/register`, `POST /auth/login`, `GET /auth/me`, `POST /auth/forgot-password`, `POST /auth/reset-password` |
-| Files | `POST /files/upload`, `GET /files`, `GET /files/:id/download` |
+| Files | `POST /files/upload`, `GET /files`, `GET /files/:id/download`, `DELETE /files/:id` |
 | Categories | `PATCH /files/:id/category`, `GET /files/categories`, `GET /files/category/:category` |
 | Search | `GET /files/search?query=&category=&page=&limit=` |
 | Metadata | `GET /files/:id/metadata` |
@@ -97,7 +98,7 @@ Details: [docs/features-api.md](docs/features-api.md).
 
 ## Tests
 
-`npm run test:e2e` (from `backend/`) runs 50 automated checks against a real
+`npm run test:e2e` (from `backend/`) runs 54 automated checks against a real
 **test** database. See [docs/backend-setup.md](docs/backend-setup.md), section 6.
 
 ## Status
