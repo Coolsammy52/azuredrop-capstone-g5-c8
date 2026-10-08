@@ -7,6 +7,17 @@ services:
       - ./backend/.env
     expose:
       - "3000"
+    restart: unless-stopped
+    networks:
+      - azuredrop-network
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: azuredrop-frontend
+    expose:
+      - "80"
+    restart: unless-stopped
     networks:
       - azuredrop-network
 
@@ -19,6 +30,8 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - api
+      - frontend
+    restart: unless-stopped
     networks:
       - azuredrop-network
 
