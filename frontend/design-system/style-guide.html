@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AzureDrop style guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#F5F7F8;--surface:#fff;--ink:#12222B;--muted:#5A6B75;--line:#DCE3E7;--primary:#0B6E8A;--primary-h:#085A72;--on-primary:#fff;--tint:#E3F2F6;--ok:#1E7F4F;--okbg:#E4F4EB;--warn:#9A5B00;--warnbg:#FCF0D9;--err:#B3261E;--errbg:#FBE7E5;
+--r:8px;--hf:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--bf:"Figtree","Segoe UI",system-ui,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E171C;--surface:#152229;--ink:#E8EEF1;--muted:#93A5AF;--line:#27363E;--primary:#4FB4D0;--primary-h:#79C8DF;--on-primary:#0E171C;--tint:#12303A;--ok:#5BC98C;--okbg:#12301F;--warn:#F0B34F;--warnbg:#35280F;--err:#F28B82;--errbg:#3A1A18}}
+:root[data-theme="dark"]{--bg:#0E171C;--surface:#152229;--ink:#E8EEF1;--muted:#93A5AF;--line:#27363E;--primary:#4FB4D0;--primary-h:#79C8DF;--on-primary:#0E171C;--tint:#12303A;--ok:#5BC98C;--okbg:#12301F;--warn:#F0B34F;--warnbg:#35280F;--err:#F28B82;--errbg:#3A1A18}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--bf)}
+h1,h2,h3{font-family:var(--hf);margin:0;line-height:1.15}
+h1{font-size:32px}h2{font-size:24px;margin-bottom:6px}h3{font-size:16px;margin:22px 0 10px}
+p{margin:0 0 12px;max-width:62ch}.muted{color:var(--muted)}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+nav.side{position:sticky;top:0;align-self:start;height:100vh;padding:20px 14px;border-right:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;gap:4px}
+.brand{font:700 20px var(--hf);padding:0 10px 14px}
+nav.side a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r);color:var(--muted);text-decoration:none;font-weight:500}
+nav.side a:hover{background:var(--bg);color:var(--ink)}
+nav.side a[aria-current="true"]{background:var(--tint);color:var(--primary);font-weight:600}
+.meter{margin-top:auto;padding:10px;font-size:13px}
+.bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;width:42%;background:var(--primary)}
+main{padding:36px clamp(16px,4vw,48px) 80px;max-width:980px;min-width:0}
+section{padding:36px 0;border-bottom:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.sw div{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface);font-size:12px}
+.sw b{display:block;height:48px}.sw span{display:block;padding:6px 8px}
+code,pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
+pre{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;overflow-x:auto}
+.btn{font:600 14px var(--bf);height:38px;padding:0 16px;border-radius:var(--r);border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .15s}
+.btn.sm{height:30px;padding:0 12px;font-size:13px}.btn.lg{height:46px;padding:0 22px;font-size:16px}
+.p{background:var(--primary);color:var(--on-primary)}.p:hover{background:var(--primary-h)}
+.s{background:var(--surface);border-color:var(--line);color:var(--ink)}.s:hover{background:var(--bg)}
+.g{background:transparent;color:var(--primary)}.g:hover{background:var(--tint)}
+.d{background:var(--err);color:#fff}.d:hover{filter:brightness(.92)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.icon{width:38px;padding:0;justify-content:center}
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:r .8s linear infinite}
+@keyframes r{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:2.5s}html{scroll-behavior:auto}}
+.av{display:inline-grid;place-items:center;border-radius:50%;background:var(--tint);color:var(--primary);font:600 13px var(--bf);width:32px;height:32px;border:2px solid var(--surface)}
+.av.s24{width:24px;height:24px;font-size:10px}.av.s40{width:40px;height:40px;font-size:15px}
+.stack .av+.av{margin-left:-10px}
+label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+.in{width:100%;height:38px;padding:0 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);color:var(--ink);font:inherit}
+.in:focus{outline:2px solid var(--primary);border-color:var(--primary)}
+.in.bad{border-color:var(--err)}.help{font-size:13px;margin-top:5px;color:var(--muted)}.help.bad{color:var(--err)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.tg{appearance:none;width:40px;height:22px;border-radius:99px;background:var(--line);position:relative;cursor:pointer;transition:background .15s;margin:0}
+.tg::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .15s}
+.tg:checked{background:var(--primary)}.tg:checked::after{transform:translateX(18px)}
+input[type=checkbox]:not(.tg){width:16px;height:16px;accent-color:var(--primary)}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:30px 20px;text-align:center;background:var(--surface);transition:background .15s,border-color .15s}
+.drop.over{border-color:var(--primary);background:var(--tint)}
+.drop.err{border-color:var(--err);background:var(--errbg)}.drop.ok{border-color:var(--ok);background:var(--okbg)}
+.drop strong{display:block;font:600 17px var(--hf);margin-bottom:4px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
+.seg button{border:0;background:var(--surface);color:var(--muted);padding:6px 12px;font:500 13px var(--bf);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--tint);color:var(--primary);font-weight:600}
+.empty{text-align:center;padding:34px 20px}.empty .ico{width:52px;height:52px;border-radius:14px;background:var(--tint);color:var(--primary);display:grid;place-items:center;margin:0 auto 12px;font-size:24px}
+.empty h3{margin:0 0 4px}.empty p{margin:0 auto 14px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{width:100%;border-collapse:collapse;min-width:620px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font:600 13px var(--bf);color:var(--muted)}tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--bg)}tr.sel{background:var(--tint)}
+.ft{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:6px;font:600 10px var(--bf);margin-right:10px;vertical-align:middle}
+.pdf{background:var(--errbg);color:var(--err)}.img{background:var(--okbg);color:var(--ok)}.zip{background:var(--warnbg);color:var(--warn)}
+.top{display:flex;align-items:center;gap:14px;padding:10px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);flex-wrap:wrap}
+.top .in{max-width:260px}.crumb{color:var(--muted);font-size:14px}.crumb b{color:var(--ink)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-top:14px}
+.tabs a{padding:8px 12px;color:var(--muted);text-decoration:none;font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs a[aria-current="true"]{color:var(--primary);border-color:var(--primary);font-weight:600}
+@media(max-width:760px){.shell{grid-template-columns:1fr}nav.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--line)}.brand{width:100%;padding-bottom:4px}.meter{display:none}}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav class="side" aria-label="Sections">
+<div class="brand">AzureDrop</div>
+<a href="#color" aria-current="true">Color</a><a href="#type">Typography</a><a href="#buttons">Buttons</a><a href="#avatars">Avatars</a><a href="#empty">Empty state</a><a href="#forms">Form controls</a><a href="#table">Table</a><a href="#nav">Navigation</a><a href="#tw">Tailwind tokens</a>
+<div class="meter"><div>Storage</div><div class="bar"><i></i></div><span class="muted">4.2 of 10 GB used</span></div>
+</nav>
+<main>
+<h1>AzureDrop design system</h1>
+<p class="muted">Tokens and components for the React frontend. Everything reads from CSS variables, so light and dark themes follow your system setting.</p>
+<div class="row"><button class="btn s sm" id="theme">Switch theme</button></div>
+
+<section id="color"><h2>Color</h2><p class="muted">Lagoon blue is the brand color. Saffron is reserved for warnings so it never competes with the primary.</p>
+<div class="sw" id="sw"></div></section>
+
+<section id="type"><h2>Typography</h2><p class="muted">Bricolage Grotesque for headings, Figtree for everything else. Sentence case throughout.</p>
+<div class="card">
+<div style="font:700 32px var(--hf)">Page title, 32</div>
+<div style="font:700 24px var(--hf);margin-top:8px">Section heading, 24</div>
+<div style="font:600 20px var(--hf);margin-top:8px">Card heading, 20</div>
+<p style="margin-top:10px;font-size:16px">Body large, 16. Use for descriptions and form help.</p>
+<p style="font-size:14px">Body, 14. Default for tables, menus and inputs.</p>
+<p class="muted" style="font-size:12px;margin:0">Caption, 12. File sizes, timestamps and hints.</p></div></section>
+
+<section id="buttons"><h2>Buttons</h2><p class="muted">One primary action per view. Destructive actions always ask for confirmation.</p>
+<h3>Variants</h3><div class="row"><button class="btn p">Upload file</button><button class="btn s">Share</button><button class="btn g">Cancel</button><button class="btn d">Delete file</button></div>
+<h3>Sizes</h3><div class="row"><button class="btn p sm">Small</button><button class="btn p">Medium</button><button class="btn p lg">Large</button></div>
+<h3>States</h3><div class="row"><button class="btn p" style="background:var(--primary-h)">Hover</button><button class="btn p" style="outline:2px solid var(--primary);outline-offset:2px">Focus</button><button class="btn p" disabled>Disabled</button><button class="btn p" disabled><span class="spin"></span>Uploading</button></div>
+<h3>Icon only</h3><div class="row"><button class="btn s icon" aria-label="Download" title="Download">&#8681;</button><button class="btn s icon" aria-label="Share" title="Share">&#10150;</button><button class="btn s icon" aria-label="Delete" title="Delete">&#10005;</button></div></section>
+
+<section id="avatars"><h2>Avatars</h2><p class="muted">Initials fall back when there is no photo. Use the stack for files shared with several people.</p>
+<div class="row"><span class="av s24">BD</span><span class="av">BD</span><span class="av s40">BD</span>
+<span class="stack"><span class="av">AO</span><span class="av">TK</span><span class="av">MN</span><span class="av" style="background:var(--line);color:var(--muted)">+3</span></span></div></section>
+
+<section id="empty"><h2>Empty state</h2><p class="muted">An icon, what is missing, and the next step.</p>
+<div class="grid2">
+<div class="card empty"><div class="ico">&#8679;</div><h3>No files yet</h3><p class="muted">Upload your first file to see it here.</p><button class="btn p">Upload file</button></div>
+<div class="card empty"><div class="ico">&#9906;</div><h3>No results for "budget"</h3><p class="muted">Check the spelling or try a shorter search.</p><button class="btn s">Clear search</button></div>
+<div class="card empty"><div class="ico">&#9741;</div><h3>Nothing shared with you</h3><p class="muted">Files other people share will appear here.</p></div></div></section>
+
+<section id="forms"><h2>Form controls</h2><p class="muted">Every control has a visible label. Errors say what went wrong and how to fix it.</p>
+<div class="grid2">
+<div><label for="e1">Email</label><input class="in" id="e1" type="email" placeholder="you@example.com"><div class="help">We use this to sign you in.</div></div>
+<div><label for="e2">Password</label><input class="in bad" id="e2" type="password" value="abc" aria-describedby="h2"><div class="help bad" id="h2">Use at least 8 characters.</div></div>
+<div><label for="e3">Sort by</label><select class="in" id="e3"><option>Last modified</option><option>Name</option><option>Size</option></select></div>
+<div><label for="e4">Disabled</label><input class="in" id="e4" disabled value="Read only"></div></div>
+<div class="row" style="margin-top:16px"><label style="display:flex;gap:8px;align-items:center;margin:0"><input type="checkbox" checked>Keep me signed in</label>
+<label style="display:flex;gap:10px;align-items:center;margin:0"><input class="tg" type="checkbox" checked>Link sharing</label></div>
+<h3>File dropzone</h3>
+<div class="seg" id="seg" role="group" aria-label="Preview state"><button aria-pressed="true" data-s="idle">Idle</button><button data-s="over">Drag over</button><button data-s="up">Uploading</button><button data-s="ok">Success</button><button data-s="err">Error</button></div>
+<div class="drop" id="drop" aria-live="polite"></div></section>
+
+<section id="table"><h2>Table</h2><p class="muted">File list with selection, sortable headers and row actions. It scrolls sideways on narrow screens.</p>
+<div class="tw"><table><thead><tr><th style="width:40px"><input type="checkbox" aria-label="Select all"></th><th aria-sort="ascending">Name &#9650;</th><th>Size</th><th>Modified</th><th>Owner</th><th></th></tr></thead><tbody>
+<tr class="sel"><td><input type="checkbox" checked aria-label="Select"></td><td><span class="ft pdf">PDF</span>Project report.pdf</td><td>2.4 MB</td><td>Today</td><td><span class="av s24">BD</span></td><td><button class="btn g sm">Download</button></td></tr>
+<tr><td><input type="checkbox" aria-label="Select"></td><td><span class="ft img">PNG</span>Architecture diagram.png</td><td>860 KB</td><td>Yesterday</td><td><span class="av s24">AO</span></td><td><button class="btn g sm">Download</button></td></tr>
+<tr><td><input type="checkbox" aria-label="Select"></td><td><span class="ft zip">ZIP</span>Backup.zip</td><td>148 MB</td><td>12 Sep</td><td><span class="av s24">TK</span></td><td><button class="btn g sm">Download</button></td></tr>
+</tbody></table></div></section>
+
+<section id="nav"><h2>Navigation</h2><p class="muted">The sidebar on this page is the app sidebar. On mobile it wraps into a top strip, and in React you can swap it for a drawer.</p>
+<div class="top"><span class="crumb">My files / <b>Reports</b></span><input class="in" placeholder="Search files" aria-label="Search files" style="margin-left:auto"><span class="av">BD</span></div>
+<div class="tabs"><a href="#nav" aria-current="true">All files</a><a href="#nav">Shared by me</a><a href="#nav">Shared with me</a></div></section>
+
+<section id="tw" style="border:0"><h2>Tailwind tokens</h2><p class="muted">Paste into <code>tailwind.config.js</code> so the team uses names instead of hex values.</p>
+<pre>theme: { extend: {
+  colors: {
+    primary: { DEFAULT: '#0B6E8A', hover: '#085A72', tint: '#E3F2F6' },
+    ink: '#12222B', muted: '#5A6B75', line: '#DCE3E7', canvas: '#F5F7F8',
+    success: '#1E7F4F', warning: '#9A5B00', danger: '#B3261E'
+  },
+  fontFamily: {
+    heading: ['Bricolage Grotesque', 'system-ui', 'sans-serif'],
+    body: ['Figtree', 'system-ui', 'sans-serif']
+  },
+  borderRadius: { DEFAULT: '8px' }
+}}</pre></section>
+</main></div>
+<script>
+const names=[['--primary','Primary'],['--primary-h','Primary hover'],['--tint','Primary tint'],['--ink','Ink'],['--muted','Muted'],['--line','Line'],['--bg','Canvas'],['--ok','Success'],['--warn','Warning'],['--err','Danger']];
+const sw=document.getElementById('sw');
+function paint(){const cs=getComputedStyle(document.documentElement);sw.innerHTML=names.map(n=>`<div><b style="background:var(${n[0]})"></b><span><strong>${n[1]}</strong><br>${cs.getPropertyValue(n[0]).trim()}</span></div>`).join('')}
+paint();
+const root=document.documentElement;
+document.getElementById('theme').onclick=()=>{const dark=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;root.dataset.theme=dark?'light':'dark';paint()};
+const S={idle:['','<strong>Drop files here</strong><span class="muted">or</span> <button class="btn p sm">Browse files</button><div class="help">Up to 100 MB per file</div>'],
+over:['over','<strong>Release to upload</strong><span class="muted">Files will be added to My files</span>'],
+up:['','<strong>Uploading report.pdf</strong><div class="bar" style="max-width:320px;margin:10px auto"><i style="width:64%"></i></div><span class="muted">64% of 2.4 MB</span> <button class="btn g sm">Cancel</button>'],
+ok:['ok','<strong style="color:var(--ok)">Upload complete</strong><span class="muted">report.pdf is in My files</span>'],
+err:['err','<strong style="color:var(--err)">Upload failed</strong><span class="muted">report.pdf is over the 100 MB limit. Choose a smaller file.</span><div style="margin-top:10px"><button class="btn s sm">Choose another file</button></div>']};
+const drop=document.getElementById('drop');
+function show(k){drop.className='drop '+S[k][0];drop.innerHTML=S[k][1];document.querySelectorAll('#seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===k))}
+document.getElementById('seg').onclick=e=>{if(e.target.dataset.s)show(e.target.dataset.s)};
+show('idle');
+const links=[...document.querySelectorAll('nav.side a')];
+addEventListener('scroll',()=>{let cur=links[0];links.forEach(a=>{const s=document.querySelector(a.getAttribute('href'));if(s&&s.getBoundingClientRect().top<140)cur=a});links.forEach(a=>a.setAttribute('aria-current',a===cur))},{passive:true});
+</script>
+</body>
+</html>
