@@ -1,0 +1,29 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: /api
+    container_name: azuredrop-frontend
+    expose:
+      - "80"
+    restart: unless-stopped
+    networks:
+      - azuredrop-frontend-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: azuredrop-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.frontend.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+    restart: unless-stopped
+    networks:
+      - azuredrop-frontend-network
+
+networks:
+  azuredrop-frontend-network:
+    driver: bridge
