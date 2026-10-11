@@ -1,0 +1,44 @@
+name: Deploy AzureDrop to Azure VM
+
+on:
+  push:
+    branches: 
+      - main
+      - g5develop
+  workflow_dispatch: # Allows manual trigger from the GitHub Actions UI
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Execute Deployment via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AZURE_VM_IP }}
+          username: ${{ secrets.AZURE_VM_USERNAME }}
+          key: ${{ secrets.AZURE_VM_SSH_KEY }}
+          script: |
+            # Navigate to the project directory
+            cd /home/${{ secrets.AZURE_VM_USERNAME }}/azuredrop-capstone-g5-c8
+            
+            # Discard any accidental local changes on the server and pull latest code
+            git reset --hard
+            git pull origin ${{ github.ref_name }}
+            
+            # Rebuild and restart the containers
+            docker compose down
+            docker compose up -d --build
+            
+            # Wait a few seconds for the database and API to initialize
+            sleep 10
+            
+            # Run database migrations inside the running API container
+            docker compose exec -T api npm run migrate
+            
+            # Clean up old dangling images to free up Azure VM disk space
+            docker image prune -f
+            
+            # Verify the deployment is healthy
+            curl -f http://localhost/api/health || exit 1
