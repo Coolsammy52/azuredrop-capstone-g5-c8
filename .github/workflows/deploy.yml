@@ -2,9 +2,9 @@ name: Deploy AzureDrop to Azure VM
 
 on:
   push:
-    branches: 
-      - main
+    branches:
       - g5develop
+      - main
   workflow_dispatch: # Allows manual trigger from the GitHub Actions UI
 
 jobs:
