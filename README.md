@@ -20,7 +20,7 @@ Application type: cloud-based file management / upload application.
 - **Authentication and access control:** users can only reach their own files.
 - **Secure file sharing:** temporary links that expire and can be revoked.
 - **Reliable cloud deployment:** Azure VM with Docker, Nginx, HTTPS and Managed Identity.
-- **Automated delivery and availability:** GitHub Actions for CI/CD (in progress) and a health check.
+- **Automated delivery and availability:** GitHub Actions for CI/CD and a health check.
 
 ## 3. Features
 
@@ -38,7 +38,7 @@ Application type: cloud-based file management / upload application.
 | `/health` endpoint | Done |
 | React frontend (all screens, light and dark theme, responsive) | Done |
 | Docker Compose, Nginx reverse proxy, HTTPS | Done on the Azure VM |
-| GitHub Actions CI/CD | In progress |
+| GitHub Actions CI/CD (automatic deploy to the Azure VM) | Done |
 
 ## 4. Architecture and technology
 
@@ -71,7 +71,7 @@ database or Blob Storage. More detail: [docs/architecture.md](docs/architecture.
 | Containers | Docker, Docker Compose |
 | Reverse proxy | Nginx |
 | HTTPS | Let's Encrypt certificate |
-| CI/CD | GitHub Actions (in progress) |
+| CI/CD | GitHub Actions |
 | Security | HTTPS/TLS, Managed Identity, Azure network security group |
 
 ## 5. Run it with Docker (recommended)
@@ -167,7 +167,10 @@ AzureDrop is deployed on an Azure Virtual Machine with Docker. The steps were:
 7. Nginx reverse proxy sends `/api` to the API and the rest to the frontend.
 8. HTTPS with a Let's Encrypt certificate, with HTTP redirected to HTTPS.
 9. Connect the API to Azure PostgreSQL (SSL) and Blob Storage (Managed Identity).
-10. GitHub Actions to automate deployment: in progress.
+10. GitHub Actions deploys automatically (`.github/workflows/deploy.yml`): on a push it
+    connects to the VM over SSH, pulls the latest code, rebuilds the containers with
+    `docker compose up -d --build`, runs the database migrations and checks `/api/health`.
+    The VM address and SSH key are stored as GitHub secrets, never in the repo.
 
 Live application: https://azuredrop-team.southafricanorth.cloudapp.azure.com/
 
@@ -227,8 +230,8 @@ Member names are listed in the group report.
 
 ## 12. Status
 
-Backend and frontend are complete and integrated. The app is deployed on the Azure
-VM behind Nginx with HTTPS. Still in progress: GitHub Actions CI/CD, and a final
-end-to-end check of upload, download and share links on the live site.
+Backend, frontend, containers, HTTPS and the GitHub Actions deployment are all done,
+and the app is live on the Azure VM. The remaining step is the QA team's full test
+of the live site (accounts, upload, download, share links, delete and security).
 
 This project was developed as part of the Group 5, Cohort 8 cloud computing capstone.
