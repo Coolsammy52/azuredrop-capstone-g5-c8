@@ -211,6 +211,10 @@ Request and response details: [docs/features-api.md](docs/features-api.md).
 `npm run test:e2e` (from `backend/`) runs the automated checks against a real
 **test** database. See [docs/backend-setup.md](docs/backend-setup.md), section 6.
 
+The QA team also tested the live site by hand: accounts, upload, download, share
+links, delete, security, performance and link expiry. The test containers used for
+this were removed afterwards.
+
 ## 10. More documentation
 
 | Doc | What it covers |
@@ -238,14 +242,13 @@ CAPSTONE Group 5 - techcrushcohort8
 | Deployment | Azure VM, Docker, Nginx, networking |
 | Security / Monitoring / Documentation | Access control, HTTPS, health checks, monitoring |
 | CI/CD | GitHub Actions |
-| QA testing | Testing and deployment validation |
+| QA testing | Testing and deployment validation (done) |
 
 Member names are listed in the group report.
 
 ## 12. Status
 
-Backend, frontend, containers, HTTPS and the GitHub Actions deployment are all done,
-and the app is live on the Azure VM. The remaining step is the QA team's full test
-of the live site (accounts, upload, download, share links, delete and security).
+Backend, frontend, containers, HTTPS, the GitHub Actions deployment and the QA testing
+of the live site are all done, and the app is live on Azure.
 
 This project was developed as part of the Group 5, Cohort 8 cloud computing capstone.
