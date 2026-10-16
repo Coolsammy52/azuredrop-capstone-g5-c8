@@ -60,6 +60,20 @@ The backend is layered: routes, middleware, controllers, models and config.
 A request goes through authentication and business logic before it touches the
 database or Blob Storage. More detail: [docs/architecture.md](docs/architecture.md).
 
+**The deployment on Azure**
+
+The VM in the Azure portal (South Africa North, Ubuntu 24.04, with a public IP and DNS name):
+
+![Azure portal overview of the azuredrop-vm virtual machine](docs/images/azure-frontend-vm-overview.png)
+
+The frontend VM runs the Nginx proxy and the frontend container. Ports 80 and 443 are open:
+
+![Containers running on the frontend VM](docs/images/frontend-vm-containers.png)
+
+The API container runs on a separate backend VM. It listens on a private address only, so it cannot be reached from the internet:
+
+![API container running on the backend VM, bound to a private address](docs/images/backend-vm-containers.png)
+
 | Layer | Technology |
 |---|---|
 | Cloud | Microsoft Azure (VM, Database for PostgreSQL, Blob Storage) |
@@ -197,6 +211,10 @@ Request and response details: [docs/features-api.md](docs/features-api.md).
 `npm run test:e2e` (from `backend/`) runs the automated checks against a real
 **test** database. See [docs/backend-setup.md](docs/backend-setup.md), section 6.
 
+The QA team also tested the live site by hand: accounts, upload, download, share
+links, delete, security, performance and link expiry. The test containers used for
+this were removed afterwards.
+
 ## 10. More documentation
 
 | Doc | What it covers |
@@ -224,14 +242,13 @@ CAPSTONE Group 5 - techcrushcohort8
 | Deployment | Azure VM, Docker, Nginx, networking |
 | Security / Monitoring / Documentation | Access control, HTTPS, health checks, monitoring |
 | CI/CD | GitHub Actions |
-| QA testing | Testing and deployment validation |
+| QA testing | Testing and deployment validation (done) |
 
 Member names are listed in the group report.
 
 ## 12. Status
 
-Backend, frontend, containers, HTTPS and the GitHub Actions deployment are all done,
-and the app is live on the Azure VM. The remaining step is the QA team's full test
-of the live site (accounts, upload, download, share links, delete and security).
+Backend, frontend, containers, HTTPS, the GitHub Actions deployment and the QA testing
+of the live site are all done, and the app is live on Azure.
 
 This project was developed as part of the Group 5, Cohort 8 cloud computing capstone.
