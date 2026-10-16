@@ -9,7 +9,7 @@ Group 5, Cohort 8 capstone project for the Techcrush Cloud Computing bootcamp.
 AzureDrop is a secure web application that lets users upload, store, manage and
 share files through a cloud-based platform. Files are stored in Azure Blob Storage
 (not on the app server), file details are kept in PostgreSQL, and the whole app
-runs in Docker containers on an Azure Virtual Machine.
+runs in Docker containers on two Azure Virtual Machines (a public frontend VM and a private backend VM).
 
 Application type: cloud-based file management / upload application.
 
@@ -19,7 +19,7 @@ Application type: cloud-based file management / upload application.
 - **Cloud storage:** files in Azure Blob Storage, user and file details in PostgreSQL.
 - **Authentication and access control:** users can only reach their own files.
 - **Secure file sharing:** temporary links that expire and can be revoked.
-- **Reliable cloud deployment:** Azure VM with Docker, Nginx, HTTPS and Managed Identity.
+- **Reliable cloud deployment:** Azure VMs with Docker, Nginx, HTTPS and Managed Identity.
 - **Automated delivery and availability:** GitHub Actions for CI/CD and a health check.
 
 ## 3. Features
@@ -42,19 +42,35 @@ Application type: cloud-based file management / upload application.
 
 ## 4. Architecture and technology
 
+AzureDrop runs on **two Azure virtual machines** in one virtual network
+(resource group `azuredrop-rg`, South Africa North):
+
 ```
-Browser  --HTTPS-->  Nginx (reverse proxy, on the VM)
-                       |-- /api/...  -->  API container (Node.js + Express, port 3000)
-                       |                    |-- Azure Database for PostgreSQL (users, files, share links)
-                       |                    `-- Azure Blob Storage (the actual files)
-                       `-- everything else --> Frontend container (React build, served by Nginx)
+Browser --HTTPS (443) / HTTP (80)--> FRONTEND VM  (public IP + DNS name)
+                                      Nginx container + frontend container (React build)
+                                        |-- everything else --> frontend container
+                                        `-- /api/...  --private network, port 3001-->
+                                                                  |
+                                      BACKEND VM  (private subnet, NO public IP)
+                                      API container (Node.js + Express)
+                                        |-- Azure Database for PostgreSQL (SSL)
+                                        `-- Azure Blob Storage (Managed Identity)
+                                      Outbound internet only, through a NAT gateway
 ```
 
-Three containers run together with Docker Compose: `api`, `frontend` and `nginx`.
-The Nginx proxy sends `/api/...` to the API (with `/api` removed) and everything
-else to the frontend. PostgreSQL is **not** a container: it is the Azure managed
-database and needs SSL. On the VM the API reaches Blob Storage using a Managed
-Identity, so no storage key is stored there.
+- **Frontend VM:** the only machine open to the internet (ports 22, 80 and 443). Its
+  Nginx container serves the React app and forwards `/api/...` to the backend VM
+  at `172.16.1.4:3001`, with `/api` removed.
+- **Backend VM:** runs the API container. It has no public IP, so it cannot be
+  reached from the internet, only from the frontend VM on one port. It reaches the
+  internet outbound only (updates, packages) through the NAT gateway.
+- **PostgreSQL and Blob Storage** are Azure managed services, not containers.
+  PostgreSQL needs SSL and only accepts the backend's outbound address. The API
+  reaches Blob Storage with a Managed Identity, so no storage key is stored.
+- If someone attacks the website, the API and the data are still not directly reachable.
+
+For local development, `docker-compose.yml` runs `api`, `frontend` and `nginx` together
+on one machine. `docker-compose.frontend.yml` is the frontend VM version.
 
 The backend is layered: routes, middleware, controllers, models and config.
 A request goes through authentication and business logic before it touches the
@@ -170,15 +186,15 @@ links work. More: [docs/backend-setup.md](docs/backend-setup.md) and [frontend/R
 
 ## 7. Deployment
 
-AzureDrop is deployed on an Azure Virtual Machine with Docker. The steps were:
+AzureDrop is deployed on two Azure Virtual Machines with Docker (see section 4). The steps were:
 
-1. Create the Azure resources (VM, PostgreSQL, storage account, network rules).
+1. Create the Azure resources (frontend VM, backend VM, NAT gateway, PostgreSQL, storage account, network rules).
 2. Configure the VM and networking (the network security group allows only the needed ports).
-3. Install Docker on the VM.
-4. Pull the project from GitHub.
-5. Create `backend/.env` on the VM (secrets live only there).
-6. Run `docker compose up -d --build`.
-7. Nginx reverse proxy sends `/api` to the API and the rest to the frontend.
+3. Install Docker on both VMs.
+4. Pull the project from GitHub on each VM.
+5. Create `backend/.env` on the backend VM (secrets live only there).
+6. Start the containers with Docker Compose: the API on the backend VM, Nginx and the frontend on the frontend VM.
+7. Nginx on the frontend VM sends `/api` to the backend VM (`172.16.1.4:3001`) and the rest to the frontend.
 8. HTTPS with a Let's Encrypt certificate, with HTTP redirected to HTTPS.
 9. Connect the API to Azure PostgreSQL (SSL) and Blob Storage (Managed Identity).
 10. GitHub Actions deploys automatically (`.github/workflows/deploy.yml`): on a push it
