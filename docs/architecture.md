@@ -5,18 +5,20 @@
 ## 1. Big picture
 
 ```
-Browser (frontend)
-      │  HTTPS
-      ▼
-   Nginx (reverse proxy)          ← Azure VM
-      │
-      ▼
-  Node.js / Express API
-      ├──► PostgreSQL        users, files (info), shared_links
-      └──► Azure Blob Storage   the actual file bytes
+Browser
+   │  HTTPS
+   ▼
+FRONTEND VM (public IP)         Nginx + React app (Docker)
+   │  /api, private network, port 3001
+   ▼
+BACKEND VM (no public IP)       Node.js / Express API (Docker)
+   ├──► Azure PostgreSQL        users, files (info), shared_links
+   └──► Azure Blob Storage      the actual file bytes (Managed Identity)
 ```
 
-- The browser only ever talks to the API. The API checks the JWT, applies the rules, then uses the database and storage.
+The backend VM reaches the internet outbound only, through a NAT gateway.
+
+- The browser only ever talks to the frontend VM; Nginx there passes `/api` calls to the API. The API checks the JWT, applies the rules, then uses the database and storage.
 - PostgreSQL stores *information about* files; Blob Storage stores the *files themselves*. `files.file_url` links the two.
 
 ## 2. Backend architecture
@@ -70,4 +72,4 @@ Full request/response details: [features-api.md](features-api.md).
 
 ## 3. Deployment
 
-Azure VM → Nginx (HTTPS, reverse proxy) → Node API; code deployed by GitHub Actions; `/health` is used to check a release. *(DevOps owner: add details here.)*
+Frontend VM (Nginx, HTTPS, reverse proxy) → private backend VM (Node API); code deployed by GitHub Actions; `/health` is used to check a release. *(DevOps owner: add details here.)*
